@@ -1,6 +1,5 @@
 package com.infyRail.route.controller;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -8,10 +7,9 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.MatrixVariable;
@@ -32,13 +30,14 @@ import com.infyRail.route.service.RouteService;
 @RestController
 @RequestMapping("/routes")
 @Validated
+@CrossOrigin
 public class RouteController {
 	@Autowired
-	RouteService routeService;
-
-	@Value("${trainms.uri}")
-	private String trainUri;
+	private RouteService routeService;
 	
+	@Autowired
+	RestTemplate restTemplate;
+
 	@PostMapping(consumes="application/json")
 	public ResponseEntity<String> createRoute(@Valid @RequestBody RouteDTO routeDTO){
 		return ResponseEntity.ok(routeService.createRoute(routeDTO));
@@ -48,10 +47,21 @@ public class RouteController {
 	@GetMapping(value = "/{routeId}")
 	public ResponseEntity<RouteDTO> fetchRoute(@PathVariable("routeId") String id){
 		
+		List<TrainDTO> trainDTOs=null;
+		TrainDTO[] forNow = null;
 //		fetching route from InfyRail-TrainMS
-		System.out.println(trainUri+"?routeId="+id);
-		TrainDTO[] forNow =new RestTemplate().getForObject(trainUri+"?routeId="+id, TrainDTO[].class);
-	    List<TrainDTO> trainDTOs= Arrays.asList(forNow);
+		System.out.println("making Get request to : "+"http://TRAINMS"+"/trainMS/trains?routeId="+id);
+
+//		load Balance
+		try {
+			forNow =restTemplate.getForObject("http://TRAINMS"+"/trainMS/trains?routeId="+id, TrainDTO[].class);
+		    trainDTOs= Arrays.asList(forNow);
+		    System.out.println("Got response from : "+"http://TRAINMS"+"/trainMS/trains?routeId="+id+" as : \n "+trainDTOs);	
+		} catch (Exception e) {
+			System.out.println("Got error from getting response from : "+"http://TRAINMS"+"/trainMS/trains?routeId="+id+" as : \n "+trainDTOs);
+			e.printStackTrace();
+		}
+	    
 		return ResponseEntity.ok(routeService.fetchRoute(id,trainDTOs));
 	}
 	
@@ -75,6 +85,8 @@ public class RouteController {
 	{
 		return ResponseEntity.ok(routeService.updateRoute1(id,routeDTO));
 	}
+	
+	
 	@DeleteMapping(value="/{routeId}/{trainId}")
 	public ResponseEntity<RouteDTO> deleteTrain(@PathVariable("routeId") String route,@PathVariable("trainId") String train){
 		return ResponseEntity.ok(routeService.deleteTrain(route, train));

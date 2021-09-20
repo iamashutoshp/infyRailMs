@@ -1,0 +1,37 @@
+{"properties": [
+  {
+    "name": "routeribbon.ribbon.eureka.enabled",
+    "type": "java.lang.String",
+    "description": "A description for 'routeribbon.ribbon.eureka.enabled'"
+  },
+  {
+    "name": "routeribbon.ribbon.listOfServers",
+    "type": "java.lang.String",
+    "description": "A description for 'routeribbon.ribbon.listOfServers'"
+  },
+  {
+    "name": "routeribbon.ribbon.listOfServers",
+    "type": "java.lang.String",
+    "description": "A description for 'routeribbon.ribbon.listOfServers'"
+  },
+  {
+    "name": "routeribbon.ribbon.listOfServers",
+    "type": "java.lang.String",
+    "description": "A description for 'routeribbon.ribbon.listOfServers'"
+  },
+  {
+    "name": "routeribbon.ribbon.listOfServers",
+    "type": "java.lang.String",
+    "description": "A description for 'routeribbon.ribbon.listOfServers'"
+  },
+  {
+    "name": "routeribbon.ribbon.listOfServers",
+    "type": "java.lang.String",
+    "description": "A description for 'routeribbon.ribbon.listOfServers'"
+  },
+  {
+    "name": "routeribbon.ribbon.listOfServers",
+    "type": "java.lang.String",
+    "description": "A description for 'routeribbon.ribbon.listOfServers'"
+  }
+]}

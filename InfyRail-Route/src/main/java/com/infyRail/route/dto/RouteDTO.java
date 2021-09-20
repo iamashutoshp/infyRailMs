@@ -46,7 +46,8 @@ public class RouteDTO {
 		return trainList;
 	}
 	public void setTrainList(List<TrainDTO> trainList) {
-		this.trainList = trainList;
+		if(trainList!=null)
+			this.trainList = trainList;
 	}
 	
 	@Override
